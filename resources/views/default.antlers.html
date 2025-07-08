@@ -1,1 +1,32 @@
-{{ content }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title ?? "Twende Tuhappen" }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <header class="bg-white shadow mb-8">
+        <div class="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-indigo-600">
+                <a href="{{ url('/') }}">Twende Tuhappen</a>
+            </h1>
+            <nav class="space-x-4">
+                <a href="{{ url('/') }}" class="text-gray-700 hover:text-indigo-500">Home</a>
+                <a href="{{ url('/events') }}" class="text-gray-700 hover:text-indigo-500">Events</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4">
+        {{ template_content }}
+    </main>
+
+    <footer class="mt-12 text-center text-sm text-gray-500 py-6">
+        &copy; {{ now format="Y" }} Twende Tuhappen. All rights reserved.
+    </footer>
+
+</body>
+</html>

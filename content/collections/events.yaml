@@ -1,0 +1,8 @@
+title: Events
+route: /events/{slug}
+template: events/show
+layout: default
+date: true
+sort_dir: desc
+sort_by: event_date
+propagate: true

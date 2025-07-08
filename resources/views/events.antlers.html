@@ -1,0 +1,135 @@
+{{ extends layout="default" }}
+
+{{section:template_content}}
+<!-- resources/views/events/index.antlers.html -->
+<!-- Events Header -->
+<section class="bg-gray-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Events</h1>
+            <p class="text-xl text-gray-300">Discover amazing events happening across Kenya</p>
+        </div>
+    </div>
+</section>
+
+<!-- Search and Filter Section -->
+<section class="py-8 bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="flex-1">
+                <form method="get" class="flex gap-4">
+                    <div class="flex-1">
+                        <input type="text" name="search" placeholder="Search events..."
+                                value="{{ get:search }}"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <select name="location" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <option value="">All Locations</option>
+                            <option value="nairobi" {{ get:location == 'nairobi' ? 'selected' : '' }}>Nairobi</option>
+                            <option value="mombasa" {{ get:location == 'mombasa' ? 'selected' : '' }}>Mombasa</option>
+                            <option value="kisumu" {{ get:location == 'kisumu' ? 'selected' : '' }}>Kisumu</option>
+                            <option value="nakuru" {{ get:location == 'nakuru' ? 'selected' : '' }}>Nakuru</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                        Search
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Events Grid -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{ collection:events sort="event_date:asc" paginate="6" as="events" }}
+
+        {{ if no_results }}
+            <div class="text-center py-12">
+                <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">No Events Found</h3>
+                <p class="text-gray-600">We couldn't find any events matching your criteria. Try adjusting your search or filters.</p>
+            </div>
+        {{ else }}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {{ events }}
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden event-card">
+                        {{ if poster_image }}
+                            <img src="{{ poster_image }}" alt="{{ title }}" class="w-full h-48 object-cover">
+                        {{ /if }}
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-semibold">{{ title }}</h3>
+                                {{ if event_date | modify_date:'+0 days' < now }}
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">Past Event</span>
+                                {{ else }}
+                                    <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">Upcoming</span>
+                                {{ /if }}
+                            </div>
+                            <p class="text-gray-600 mb-4">{{ description | truncate:120 }}</p>
+
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    {{ event_date format="F j, Y g:i A" }}
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    {{ location }}
+                                </div>
+                            </div>
+
+                            <div class="flex gap-2">
+                                <a href="{{ url }}" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors text-sm flex-1 text-center">
+                                    View Details
+                                </a>
+                                {{ if event_date | modify_date:'+0 days' >= now }}
+                                    <a href="{{ registration_url }}" target="_blank" class="border border-purple-600 text-purple-600 px-4 py-2 rounded hover:bg-purple-50 transition-colors text-sm">
+                                        Register
+                                    </a>
+                                {{ /if }}
+                            </div>
+                        </div>
+                    </div>
+                {{ /events }}
+            </div>
+
+            <!-- Pagination -->
+            {{ if total_pages > 1 }}
+                <div class="mt-12 flex justify-center">
+                    <nav class="flex space-x-2">
+                        {{ if prev_page }}
+                            <a href="{{ prev_page }}" class="px-3 py-2 text-sm bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded">
+                                Previous
+                            </a>
+                        {{ /if }}
+
+                        {{ paginate }}
+                            {{ if current_page }}
+                                <span class="px-3 py-2 text-sm bg-purple-600 text-white rounded">{{ page }}</span>
+                            {{ else }}
+                                <a href="{{ url }}" class="px-3 py-2 text-sm bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded">{{ page }}</a>
+                            {{ /if }}
+                        {{ /paginate }}
+
+                        {{ if next_page }}
+                            <a href="{{ next_page }}" class="px-3 py-2 text-sm bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded">
+                                Next
+                            </a>
+                        {{ /if }}
+                    </nav>
+                </div>
+            {{ /if }}
+        {{ /if }}
+    </div>
+</section>
+{{/section:template_content}}

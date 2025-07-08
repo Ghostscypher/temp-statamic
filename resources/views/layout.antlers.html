@@ -1,15 +1,46 @@
-<!doctype html>
-<html lang="{{ site:short_locale }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ title ?? site:name }}</title>
-        {{ vite src="resources/js/site.js|resources/css/site.css" }}
-    </head>
-    <body class="bg-slate-100 dark:bg-gray-800 font-sans leading-normal text-slate-800 dark:text-gray-400">
-        <div class="mx-auto px-2 lg:min-h-screen flex flex-col items-center justify-center">
-            {{ template_content }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title ?? site:name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .event-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <header class="bg-white shadow mb-8">
+        <div class="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-indigo-600">
+                <a href="/">Twende Tuhappen</a>
+            </h1>
+            <nav class="space-x-4">
+                <a href="/" class="text-gray-700 hover:text-indigo-500">Home</a>
+                <a href="/events" class="text-gray-700 hover:text-indigo-500">Events</a>
+            </nav>
         </div>
-    </body>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4">
+        {{ yield:template_content }}
+    </main>
+
+    <footer class="mt-12 text-center text-sm text-gray-500 py-6">
+        &copy; {{ now format="Y" }} Twende Tuhappen. All rights reserved.
+    </footer>
+
+</body>
 </html>
